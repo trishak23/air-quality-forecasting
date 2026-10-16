@@ -1,0 +1,21 @@
+seed: 42
+data:
+  start: "2022-01-01"
+  n_hours: 17520          # two years of hourly data
+  sample_path: data/air_quality_hourly.csv
+horizon_hours: 24
+split:
+  test_fraction: 0.30     # last 30% of the timeline is held out
+features:
+  pm_lags: [1, 2, 3, 6, 12, 24, 48, 168]
+  roll_windows: [6, 24, 72]
+model:
+  cv_splits: 4
+  param_grid:
+    - {learning_rate: 0.03, max_iter: 300, max_leaf_nodes: 6, min_samples_leaf: 150, l2_regularization: 5.0, loss: absolute_error}
+    - {learning_rate: 0.03, max_iter: 300, max_leaf_nodes: 6, min_samples_leaf: 150, l2_regularization: 5.0}
+    - {learning_rate: 0.03, max_iter: 200, max_leaf_nodes: 8, min_samples_leaf: 100}
+paths:
+  model: models/gbm_pm25_h24.joblib
+  metrics: reports/metrics.json
+  figures: reports/figures
